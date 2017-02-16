@@ -25,18 +25,21 @@
 
       var Place = function (data, map) {
           var self = this;
-          this.name = name;
-          this.address = address;
+          this.name = data.name;
+          this.address = data.address;
           this.marker = new google.maps.Marker({
-              position: {lat: data.latitude, lng: data.longitude},
+              position: {lat: data.lat, lng: data.lng},
               map: map,
               title: 'First Marker'
           });
+
+          map.panTo(self.marker.getPosition())
+
       };
 
       var viewModel = {
 
-          places: ko.observableArray(places),
+          restaurants: ko.observableArray(places),
 
           query: ko.observable(''),
 
@@ -56,8 +59,7 @@
           }
       };
 
-      viewModel.createPlaces();
-      console.log(viewModel.restaurants());
+
 
       viewModel.query.subscribe(viewModel.search);
 
