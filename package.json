@@ -1,0 +1,11 @@
+{
+  "name": "neighborhoodmap1",
+  "version": "1.0.0",
+  "description": "A neighborhood map that shows the near by restaurants",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Harshini",
+  "license": "ISC"
+}
