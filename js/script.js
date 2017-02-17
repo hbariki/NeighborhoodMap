@@ -1,69 +1,68 @@
-
- // $(function() {
-      var places = [
-          {
-              name: "Dish dash",
-              address: "Murphy Ave, Sunnyvale, CA",
-              lat: 23.45,
-              lng: 45.345,
-          },
-
-          {
-              name: "Bawarchi",
-              address: "ElcaminoReal, Sunnyvale, CA",
-              lat: 33.45,
-              lng: 45.345,
-          },
-          {
-              name: "kung pao chicken",
-              address: "cherry Orchard shopping center, 390W El Camino Real, Sunnyvale, CA",
-              lat: 34.45,
-              lng: 45.345,
-          },
-
-      ];
-
-      var Place = function (data, map) {
-          var self = this;
-          this.name = data.name;
-          this.address = data.address;
-          this.marker = new google.maps.Marker({
-              position: {lat: data.lat, lng: data.lng},
-              map: map,
-              title: 'First Marker'
-          });
-
-          map.panTo(self.marker.getPosition())
-
-      };
-
-      var viewModel = {
-
-          restaurants: ko.observableArray(places),
-
-          query: ko.observable(''),
-
-          createPlaces: function (map) {
-              places.forEach(function (place) {
-                  viewModel.restaurants.push(new Place(place, map));
-              });
-          },
-
-          search: function (value) {
-              viewModel.places.removeAll();
-              for (var x in places) {
-                  if (places[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-                      viewModel.places.push(places[x]);
-                  }
-              }
-          }
-      };
+//https://www.youtube.com/watch?v=JGwRIbWWqjE
+var places = [
+    {
+        name: "Dish dash",
+        address: "Murphy Ave, Sunnyvale, CA",
+        lat: 37.7739,
+        lng: -122.4292
+    },
+    {
+        name: "Bawarchi",
+        address: "ElcaminoReal, Sunnyvale, CA",
+        lat: 36.7739,
+        lng: -122.4292
+    },
+    {
+        name: "P.F chang's",
+        address: "cherry Orchard shopping center, 390W El Camino Real, Sunnyvale, CA",
+        lat: 37.7122,
+        lng: -122.4219
+    },
+    {
+        name:"Yard house",
+        address:"Santana Row, 300 Santana Row 101, San Jose, CA 95128",
+        lat:37.6921,
+        lng:-122.4220
+    },
+    {
+        name:"Peacock Restaurant",
+        address:"2760 Aborn Rd, San Jose, CA 95121",
+        lat:37.529,
+        lng:-122.559
+    },
+    {
+        name:"Bamboo Garden",
+        address:"151 W Washington Ave, Sunnyvale, CA 94087",
+        lat:37.692,
+        lng:-121.229
+    }
 
 
+];
 
-      viewModel.query.subscribe(viewModel.search);
+var map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat:37.773972, lng:-122.431297},
+    scrollwheel: true,
+    zoom:4
+});
 
-      ko.applyBindings(viewModel);
+places.forEach(function(place) {
+    addMarker(place);
+});
 
+function addMarker(place) {
 
+    var infowindow = new google.maps.InfoWindow({
+        content: place.name + '<br>' + place.address
+    });
 
+    var marker = new google.maps.Marker({
+        position: {lat:place.lat, lng:place.lng},
+        map: map,
+        title: 'San Francisco'
+    });
+
+    marker.addListener('click', function() {
+        infowindow.open(map, marker);
+    });
+}

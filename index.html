@@ -4,13 +4,7 @@
     <title>NeighborhoodMap</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
-
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js" type="text/javascript"></script>
-    <script src='http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js'></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/1.2.1/knockout-min.js"></script>
-
-    <script type="text/javascript" src="js/script.js"></script>
-
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
     <style>
         #map {
             height: 100%;
@@ -21,44 +15,21 @@
             margin: 0;
             padding: 0;
         }
-
     </style>
-
-
-    <form action = "#">
-        <input placeholder = "Search..." type ="search" name="q" data-bind="value: query, valueUpdate:'keyup'" autocomplete = off>
-    </form>
-    <div class="content">
-        <ul data-bind="template: {name:'place', foreach:places}">
-        </ul>
-    </div>
-    <script data-proofer-ignore type="text/html" id="place">
-        <li>
-            <strong data-bind="text:name" ></strong>
-            <strong data-bind="text:address"></strong>
-        </li>
-    </script>
 </head>
-<body>
-<div id="map"></div>
-<script>
-     function initMap() {
-       // Create a map object and specify the DOM element for display.
-        var map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat:37.773972, lng:-122.431297},
-            scrollwheel: false,
-            zoom:5
-        });
-
-
-
-     viewModel.createPlaces(map);
-    }
-</script>
-
-
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADRCnKHQ97WEx8h-pHJM-i7vMEnVGoZpw&callback=initMap"
-        async defer></script>
+<body style="padding: 10px;">
+<div class="col-md-3">
+    <input placeholder = "Search..." class="form-control" type ="search" name="q" data-bind="value: query, valueUpdate:'keyup'" autocomplete = off>
+</div>
+<div class="col-md-1">
+    <a href="#" class="btn btn-info">
+        <span class="glyphicon glyphicon-filter"></span> Filter
+    </a>
+</div>
+<div id ="map" class="col-md-8"></div>
 </body>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js" type="text/javascript"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADRCnKHQ97WEx8h-pHJM-i7vMEnVGoZpw"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/1.2.1/knockout-min.js"></script>
+<script type="text/javascript" src="js/script.js"></script>
 </html>
