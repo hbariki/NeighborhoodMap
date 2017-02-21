@@ -86,9 +86,15 @@ function initKo(places) {
         var filter = this.filter().toLowerCase();
         if (!filter) {
             var nearByRestaurants = this.nearByRestaurants();
-            nearByRestaurants.forEach(function (place) {
-                addMarker(place);
-            });
+            if(markers.length === 0) {
+                nearByRestaurants.forEach(function (place) {
+                    addMarker(place);
+                });
+            }else {
+                markers.forEach(function(restaurantMarker){
+                    restaurantMarker.marker.setVisible(true);
+                })
+            }
             return nearByRestaurants;
         } else {
             var filteredRestaurants = ko.utils.arrayFilter(this.nearByRestaurants(), function(restaurant) {
