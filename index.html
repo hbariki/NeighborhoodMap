@@ -2,24 +2,24 @@
 <html>
 <head>
     <title>NeighborhoodMap</title>
-    <meta name="viewport" content="initial-scale=1.0">
+    <meta name="viewport" content=" width=device-width initial-scale=1.0">
     <meta charset="utf-8">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/style.css" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 </head>
 <body>
 
-<div id = "header">
-    <div class = "col-md-3 ">
+<header>
+    <div class = "col-md-3">
         <h3>Neighborhood Map</h3>
     </div>
-    <div class="container" id="menu">
+    <nav class="container" id="menu">
         <div class="bar1"></div>
         <div class="bar2"></div>
         <div class="bar3"></div>
-    </div>
-</div>
-<div class="col-sm-3" id="searchSection">
+    </nav>
+</header>
+<aside class="col-sm-3" id="searchSection">
     <div class="row">
         <input class="form-control" placeholder="Search for restaurants" data-bind="value: filter, valueUpdate: 'afterkeydown'" />
     </div>
@@ -28,13 +28,13 @@
             <a href="#" class="list-group-item" data-bind="text: $data.name, click: $parent.showInfo"></a>
         </div>
     </div>
-</div>
-<div class="col-sm-9" id="mapWrapper">
+</aside>
+<main class="col-sm-9" id="mapWrapper">
     <div id ="map"></div>
-</div>
+</main>
 </body>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADRCnKHQ97WEx8h-pHJM-i7vMEnVGoZpw"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
-<script type="text/javascript" src="js/script.js"></script>
+<script src="js/script.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADRCnKHQ97WEx8h-pHJM-i7vMEnVGoZpw&callback=initMap" async defer></script>
 </html>
