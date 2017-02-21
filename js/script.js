@@ -12,11 +12,16 @@ $('#menu').click(function() {
 });
 
 var map;
+var infoWindow;
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 37.773972, lng: -122.431297},
         scrollwheel: true,
         zoom: 11
+    });
+
+    infoWindow = new google.maps.InfoWindow({
+        content: ''
     });
 }
 
@@ -110,11 +115,6 @@ function initKo(places) {
 
 //  adds marker
 function addMarker(place) {
-
-    var infowindow = new google.maps.InfoWindow({
-        content: place.name + '<br>' + place.address
-    });
-
     var marker = new google.maps.Marker({
         position: {lat: place.lat, lng: place.lng},
         map: map,
@@ -125,29 +125,12 @@ function addMarker(place) {
         marker: marker,
         place: place
     });
+
     marker.addListener('click', function () {
         marker.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function(){ marker.setAnimation(null); }, 1400);
-        infowindow.open(map, marker);
+
+        infoWindow.setContent(place.name + '<br>' + place.address)
+        infoWindow.open(map, marker);
     });
-}
-
-// displays the info window
-function showInfo(place) {
-    var infowindow = new google.maps.InfoWindow({
-        content: place.name + '<br>' + place.address
-    });
-
-    var marker = new google.maps.Marker({
-        position: {lat: place.lat, lng: place.lng},
-        map: map,
-        title: 'San Francisco'
-    });
-
-    marker.setAnimation(google.maps.Animation.BOUNCE);
-
-    // stop bounce animation after a second
-    setTimeout(function(){ marker.setAnimation(null); }, 1400);
-
-    infowindow.open(map, marker);
 }
