@@ -1,55 +1,95 @@
-//https://www.youtube.com/watch?v=JGwRIbWWqjE
-var places = [
-    {
-        name: "Dish dash",
-        address: "Murphy Ave, Sunnyvale, CA",
-        lat: 37.7739,
-        lng: -122.4292
-    },
-    {
-        name: "Bawarchi",
-        address: "ElcaminoReal, Sunnyvale, CA",
-        lat: 36.7739,
-        lng: -122.4292
-    },
-    {
-        name: "P.F chang's",
-        address: "cherry Orchard shopping center, 390W El Camino Real, Sunnyvale, CA",
-        lat: 37.7122,
-        lng: -122.4219
-    },
-    {
-        name:"Yard house",
-        address:"Santana Row, 300 Santana Row 101, San Jose, CA 95128",
-        lat:37.6921,
-        lng:-122.4220
-    },
-    {
-        name:"Peacock Restaurant",
-        address:"2760 Aborn Rd, San Jose, CA 95121",
-        lat:37.529,
-        lng:-122.559
-    },
-    {
-        name:"Bamboo Garden",
-        address:"151 W Washington Ave, Sunnyvale, CA 94087",
-        lat:37.692,
-        lng:-121.229
+var isMenuVisible = false;
+$('#menu').click(function() {
+    if(!isMenuVisible) {
+        isMenuVisible = true;
+        $('#searchSection').removeClass('hide');
+        $('#searchSection').addClass('show');
+    } else {
+        isMenuVisible = false;
+        $('#searchSection').removeClass('show');
+        $('#searchSection').addClass('hide');
     }
+});
 
-
-];
-
-var map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat:37.773972, lng:-122.431297},
+var markers = [];
+// loads empty marker
+var map =  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 37.773972, lng: -122.431297},
     scrollwheel: true,
-    zoom:4
+    zoom: 11
 });
 
-places.forEach(function(place) {
-    addMarker(place);
-});
+initPlaces()
+    .then(function(places) {
+        initKo(places)
+    })
+    .catch(function(errorObj) {
+        console.log(errorObj);
+    });
 
+// used promise to get the information from four square API
+function initPlaces() {
+    return new Promise(function(resolve, reject) {
+        var places = [];
+        var url = 'https://api.foursquare.com/v2/venues/search?query=restaurants&ll=37.773972,-122.431297&client_id=PHZBRN5QYY4JI0IKM4PHMTYLOUAUZSBCNT5NSH4TZLTIVP0J&client_secret=H5TYBLH1P2X2NECUHQZSKZTPTCPZMMVXXFVZDKPMOX1HRQAE&v=20170219&limit=25';
+        $.get(url, function(responseData) {
+            var responseObj = JSON.parse(responseData);
+            responseObj.response.venues.forEach(function(venue) {
+                places.push({
+                    lat: venue.location.lat,
+                    lng: venue.location.lng,
+                    name: venue.name,
+                    address: venue.location.address
+                });
+            });
+
+            resolve(places);
+        }, function(failureObj) {
+            reject(failureObj);
+        });
+    });
+}
+
+// Implemented knockout approach to filtered the places and display the list of items
+function initKo(places) {
+    var viewModel = {
+        filter: ko.observable(''),
+        nearByRestaurants: ko.observableArray(places),
+        showInfo: function () {
+            showInfo(this);
+        }
+    };
+
+    viewModel.filteredItems = ko.computed(function() {
+        var filter = this.filter().toLowerCase();
+        if (!filter) {
+            var nearByRestaurants = this.nearByRestaurants();
+            nearByRestaurants.forEach(function (place) {
+                addMarker(place);
+            });
+            return nearByRestaurants;
+        } else {
+            var filteredRestaurants = ko.utils.arrayFilter(this.nearByRestaurants(), function(item) {
+                return stringStartsWith(item.name.toLowerCase(), filter);
+            });
+
+            // remove all markers
+            markers.forEach(function(marker) {
+                marker.setMap(null);
+            });
+
+            filteredRestaurants.forEach(function (place) {
+                addMarker(place);
+            });
+
+            return filteredRestaurants;
+        }
+    }, viewModel);
+
+    ko.applyBindings(viewModel);
+}
+
+//  adds marker
 function addMarker(place) {
 
     var infowindow = new google.maps.InfoWindow({
@@ -57,12 +97,36 @@ function addMarker(place) {
     });
 
     var marker = new google.maps.Marker({
-        position: {lat:place.lat, lng:place.lng},
+        position: {lat: place.lat, lng: place.lng},
         map: map,
         title: 'San Francisco'
     });
 
-    marker.addListener('click', function() {
+    markers.push(marker);
+    marker.addListener('click', function () {
         infowindow.open(map, marker);
     });
 }
+
+// displays the info window
+function showInfo(place) {
+    var infowindow = new google.maps.InfoWindow({
+        content: place.name + '<br>' + place.address
+    });
+
+    var marker = new google.maps.Marker({
+        position: {lat: place.lat, lng: place.lng},
+        map: map,
+        title: 'San Francisco'
+    });
+
+    infowindow.open(map, marker);
+}
+
+// checks string that matches to the enteres string
+var stringStartsWith = function (string, startsWith) {
+    string = string || "";
+    if (startsWith.length > string.length)
+        return false;
+    return string.substring(0, startsWith.length) === startsWith;
+};
