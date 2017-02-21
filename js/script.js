@@ -21,8 +21,6 @@ function initMap() {
 }
 
 var markers = [];
-
-
 initPlaces()
     .then(function(places) {
         initKo(places)
@@ -43,13 +41,16 @@ function initPlaces() {
             datatype: 'json',
             url: url,
             success: function(successData) {
+                var counter = 1;
                 successData.response.venues.forEach(function(venue) {
                     places.push({
                         lat: venue.location.lat,
                         lng: venue.location.lng,
                         name: venue.name,
-                        address: venue.location.address
+                        address: venue.location.address,
+                        id: counter
                     });
+                    counter++;
                 });
 
                 resolve(places);
@@ -80,17 +81,23 @@ function initKo(places) {
             });
             return nearByRestaurants;
         } else {
-            var filteredRestaurants = ko.utils.arrayFilter(this.nearByRestaurants(), function(item) {
-                return stringStartsWith(item.name.toLowerCase(), filter);
+            var filteredRestaurants = ko.utils.arrayFilter(this.nearByRestaurants(), function(restaurant) {
+                return restaurant.name.toLowerCase().indexOf(filter) !== -1;
             });
 
-            // remove all markers
-            markers.forEach(function(marker) {
-                marker.setMap(null);
-            });
+            markers.forEach(function(restaurantMarker) {
+                var isRestaurantFiltered = false;
+                filteredRestaurants.forEach(function(filteredRestaurant) {
+                   if(restaurantMarker.place === filteredRestaurant) {
+                       isRestaurantFiltered = true;
+                   }
+                });
 
-            filteredRestaurants.forEach(function (place) {
-                addMarker(place);
+                if(isRestaurantFiltered) {
+                    restaurantMarker.marker.setVisible(true);
+                } else {
+                    restaurantMarker.marker.setVisible(false);
+                }
             });
 
             return filteredRestaurants;
@@ -113,8 +120,12 @@ function addMarker(place) {
         title: 'San Francisco'
     });
 
-    markers.push(marker);
+    markers.push({
+        marker: marker,
+        place: place
+    });
     marker.addListener('click', function () {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
         infowindow.open(map, marker);
     });
 }
@@ -134,15 +145,7 @@ function showInfo(place) {
     marker.setAnimation(google.maps.Animation.BOUNCE);
 
     // stop bounce animation after a second
-    setTimeout(function(){ marker.setAnimation(null); }, 1000);
+    setTimeout(function(){ marker.setAnimation(null); }, 1400);
 
     infowindow.open(map, marker);
 }
-
-// checks string that matches to the enteres string
-var stringStartsWith = function (string, startsWith) {
-    string = string || "";
-    if (startsWith.length > string.length)
-        return false;
-    return string.substring(0, startsWith.length) === startsWith;
-};
