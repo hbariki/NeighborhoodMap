@@ -25,6 +25,10 @@ function initMap() {
     });
 }
 
+function googleError() {
+    console.log("error,something went wrong")
+}
+
 var markers = [];
 initPlaces()
     .then(function(places) {
@@ -130,7 +134,7 @@ function addMarker(place) {
         marker.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function(){ marker.setAnimation(null); }, 1400);
 
-        infoWindow.setContent(place.name + '<br>' + place.address)
+        infoWindow.setContent(place.name + '<br>' + place.address);
         infoWindow.open(map, marker);
     });
 }
