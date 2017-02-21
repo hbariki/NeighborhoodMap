@@ -47,7 +47,7 @@ function initPlaces() {
                         lat: venue.location.lat,
                         lng: venue.location.lng,
                         name: venue.name,
-                        address: venue.location.address,
+                        address: venue.location.address ? venue.location.address : 'No address available',
                         id: counter
                     });
                     counter++;
@@ -68,7 +68,8 @@ function initKo(places) {
         filter: ko.observable(''),
         nearByRestaurants: ko.observableArray(places),
         showInfo: function () {
-            showInfo(this);
+            var restaurantMarker = markers[this.id - 1];
+            google.maps.event.trigger(restaurantMarker.marker, 'click');
         }
     };
 
@@ -126,6 +127,7 @@ function addMarker(place) {
     });
     marker.addListener('click', function () {
         marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function(){ marker.setAnimation(null); }, 1400);
         infowindow.open(map, marker);
     });
 }
