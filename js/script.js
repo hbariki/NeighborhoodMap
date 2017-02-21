@@ -127,6 +127,11 @@ function showInfo(place) {
         title: 'San Francisco'
     });
 
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+
+    // stop bounce animation after a second
+    setTimeout(function(){ marker.setAnimation(null); }, 1000);
+
     infowindow.open(map, marker);
 }
 
