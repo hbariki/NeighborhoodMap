@@ -131,6 +131,10 @@ function addMarker(place) {
     });
 
     marker.addListener('click', function () {
+        window.setTimeout(function () {
+            map.panTo(marker.getPosition());
+        }, 3000);
+
         marker.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function(){ marker.setAnimation(null); }, 1400);
 
