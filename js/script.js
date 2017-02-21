@@ -1,3 +1,16 @@
+var isMenuVisible = false;
+$('#menu').click(function() {
+    if(!isMenuVisible) {
+        isMenuVisible = true;
+        $('#searchSection').removeClass('hide');
+        $('#searchSection').addClass('show');
+    } else {
+        isMenuVisible = false;
+        $('#searchSection').removeClass('show');
+        $('#searchSection').addClass('hide');
+    }
+});
+
 var markers = [];
 // loads empty marker
 var map =  map = new google.maps.Map(document.getElementById('map'), {
@@ -5,7 +18,6 @@ var map =  map = new google.maps.Map(document.getElementById('map'), {
     scrollwheel: true,
     zoom: 11
 });
-
 
 initPlaces()
     .then(function(places) {
