@@ -24,7 +24,8 @@ initPlaces()
         initKo(places)
     })
     .catch(function(errorObj) {
-        console.log(errorObj);
+        $('#mapWrapper').hide();
+        alert('Sorry! something went wrong');
     });
 
 // used promise to get the information from four square API
@@ -32,20 +33,26 @@ function initPlaces() {
     return new Promise(function(resolve, reject) {
         var places = [];
         var url = 'https://api.foursquare.com/v2/venues/search?query=restaurants&ll=37.773972,-122.431297&client_id=PHZBRN5QYY4JI0IKM4PHMTYLOUAUZSBCNT5NSH4TZLTIVP0J&client_secret=H5TYBLH1P2X2NECUHQZSKZTPTCPZMMVXXFVZDKPMOX1HRQAE&v=20170219&limit=25';
-        $.get(url, function(responseData) {
-            var responseObj = JSON.parse(responseData);
-            responseObj.response.venues.forEach(function(venue) {
-                places.push({
-                    lat: venue.location.lat,
-                    lng: venue.location.lng,
-                    name: venue.name,
-                    address: venue.location.address
-                });
-            });
 
-            resolve(places);
-        }, function(failureObj) {
-            reject(failureObj);
+        $.ajax({
+            type: 'get',
+            datatype: 'json',
+            url: url,
+            success: function(successData) {
+                successData.response.venues.forEach(function(venue) {
+                    places.push({
+                        lat: venue.location.lat,
+                        lng: venue.location.lng,
+                        name: venue.name,
+                        address: venue.location.address
+                    });
+                });
+
+                resolve(places);
+            },
+            error: function(jqXHR, message, errorObj) {
+                reject(errorObj);
+            }
         });
     });
 }
