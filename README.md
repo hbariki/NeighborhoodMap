@@ -9,6 +9,7 @@ Instructions to run Neighborhood project
 1. clone or download the repository.
 2.open the index.html in your webbrowser.
 3.Neighborhood Map will be dispalyed in your browser.
+4.You can also check it here  https://hbariki.github.io/NeighborhoodMap/
 
 
 References
