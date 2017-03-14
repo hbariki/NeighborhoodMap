@@ -2,13 +2,14 @@
 
 
 Udacity Neighborhoodmap dispalys the map with the nearby Restaurants in the SanFrancisco using Google Maps API, knockout.js, jquery.
-when we search the restaurant it displays the marker of that location and opens the infoWindow. Address is displayed by using foursquare.
+when we search the restaurant it displays the marker of that location and opens the infoWindow.You can also filter the restaurants by typing first letter in searchbox, It filters the restaurants. Addresses of the restaurants are displayed by using foursquare.
 
-Instructions to run Neighborhood project
+Instructions to run Neighborhood project:
 
 1. clone or download the repository.
 2.open the index.html in your webbrowser.
 3.Neighborhood Map will be dispalyed in your browser.
+4.You can search the restaurants in your searchbar.
 4.You can also check it here  https://hbariki.github.io/NeighborhoodMap/
 
 
